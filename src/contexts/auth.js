@@ -28,6 +28,38 @@ function AuthProvider({ children }){
 
   }, [])
 
+  //Fazendo login do usuário
+  async function signIn(email, password){
+    setLoadingAuth(true);
+
+    await firebase.auth().signInWithEmailAndPassword(email, password)
+    .then( async (value) => {
+      let uid = value.user.uid;
+
+      //pegando informações do banco de dados
+      const userProfile = await firebase.firestore().collection('users')
+      .doc(uid).get()
+
+      let data = {
+        uid: uid,
+        nome: userProfile.data().nome,
+        avatarUrl: userProfile.data().avatarUrl,
+        email: value.user.email
+      };
+
+      setUser(data);
+      storageUser(data);
+      setLoadingAuth(false);
+
+    })
+    .catch( (error) => {
+      console.log(error);
+      setLoadingAuth(false);
+    })
+
+  }
+
+  //Criando novo usuário
   async function signUp(email, password, name){
     setLoadingAuth(true);
     await firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -67,7 +99,7 @@ function AuthProvider({ children }){
     localStorage.setItem('sistemaUser', JSON.stringify(data));    
   }
 
-
+  //finalizando sessão do usuário
   async function logout(){
     await firebase.auth().signOut();
 
@@ -85,7 +117,9 @@ function AuthProvider({ children }){
        user, 
        loading, 
        signUp,
-       logout 
+       logout,
+       signIn,
+       loadingAuth 
       }}
      >
       { children }
