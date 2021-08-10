@@ -49,7 +49,6 @@
   align-items: center;
 }
 .sidebar a:hover{
-  background-color: #121212;
   color: #bd93f9;
   transition: all 0.4s;
 }
@@ -60,6 +59,11 @@
 .sidebar a svg:hover{
   color: #bd93f9 !important;
   transition: all 0.4s !important;
+}
+
+.content{
+  margin-left: 200px;
+  padding: 1px 16px;
 }
 
 @media screen and (max-width: 700px){
@@ -76,6 +80,10 @@
   .sidebar div{
     display: none;
   }
+
+  .content{
+    margin-left: 0;
+  }
 }
 
 @media screen and (max-width: 400px){
@@ -85,5 +93,9 @@
   } 
   .sidebar a svg{
     display: none;
+  }
+
+  .content{
+    margin-left: 0;
   }
 }
