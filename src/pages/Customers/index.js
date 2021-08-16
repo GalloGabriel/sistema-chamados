@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import firebase from '../../services/firebaseConnection';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { FiUser } from 'react-icons/fi';
 import './customers.css';
+import { toast } from 'react-toastify';
 
 export default function Customers(){
 
@@ -11,9 +13,34 @@ export default function Customers(){
   const [adress, setAdress] = useState('');
 
 
-  function handleAdd(e){
+  async function handleAdd(e){
     e.preventDefault();
-    alert('CLICASTE');
+
+    if(nomeEmpresa !== "" && cnpj !== "" && adress !== ""){
+      
+      await firebase.firestore().collection('customers')
+      .add({
+        nome: nomeEmpresa,
+        cnpj: cnpj,
+        endereço: adress
+      })
+      .then( () => {
+        setNomeEmpresa('');
+        setCnpj('');
+        setAdress('');
+
+        toast.success('Cliente cadastrado com sucesso!');
+      })
+      .catch( (error) => {
+        console.log(error);
+        toast.error("Erro ao cadastrar cliente.");
+      })
+      
+    }else{
+      toast.error("Por favor, preencha todos os campos.");
+    }
+
+    
   }
   
 
