@@ -1,0 +1,37 @@
+.dashboard{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.dashboard span{
+  margin: 2em 0;
+  font-weight: 600;
+  font-size: 1.3em;
+}
+
+.new{
+  float: right;
+  margin-bottom: 1.5em;
+  background-color: #50fa7b;
+  color: #fff;
+  border: 0;
+  padding: .5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  transition: ease-in 0.2s;
+}
+.new:hover{
+  background-color: #2c9e49;
+  transform: scale(1.1);
+}
+
+.new svg{
+  margin-right: 5px;
+}
