@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { FiPlus } from 'react-icons/fi';
 import './new.css';
 
 export default function New(){
+
+  const [assunto, setAssunto] = useState('Suporte');
+  const [status, setStatus] = useState('Aberto');
+  const [complemento, setComplemento] = useState('');
 
   function handleRegister(e){
     e.preventDefault();
@@ -28,7 +33,7 @@ export default function New(){
             </select>
 
             <label>Assunto</label>
-            <select>
+            <select value={assunto} onChange={(e) => setAssunto(e.target.value)} >
               <option value="Suporte">Suporte</option>
               <option value="Visita Tecnica">Visita Tecnica</option>
               <option value="Financeiro">Financeiro</option>
@@ -40,6 +45,8 @@ export default function New(){
                 type="radio" 
                 name="radio"
                 value="Aberto"
+                onChange={ (e) => setStatus(e.target.value) }
+                checked={ status === 'Aberto' }
               />
               <span>Em Aberto</span>
 
@@ -47,6 +54,8 @@ export default function New(){
                 type="radio" 
                 name="radio"
                 value="Progresso"
+                onChange={ (e) => setStatus(e.target.value) }
+                checked={ status === 'Progresso' }
               />
               <span>Em Progresso</span>
 
@@ -54,6 +63,8 @@ export default function New(){
                 type="radio" 
                 name="radio"
                 value="Concluido"
+                onChange={ (e) => setStatus(e.target.value) }
+                checked={ status === 'Concluido' }
               />
               <span>Concluído</span>
             </div>
@@ -62,6 +73,8 @@ export default function New(){
             <textarea 
               type="text"
               placeholder="Descreva seu chamado (opcional)."
+              value={complemento}
+              onChange={ (e) => setComplemento(e.target.value) }
             />
 
             <button type="submit">Salvar</button>
