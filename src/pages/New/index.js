@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import firebase from '../../services/firebaseConnection';
+import { AuthContext } from '../../contexts/auth';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { FiPlus } from 'react-icons/fi';
@@ -6,9 +8,62 @@ import './new.css';
 
 export default function New(){
 
+  const [loadCustomers, setLoadCustomers] = useState(true);
+  const [customers, setCustomers] = useState([]);
+  const [customerSelected, setCustomerSelected] = useState(0);
   const [assunto, setAssunto] = useState('Suporte');
   const [status, setStatus] = useState('Aberto');
   const [complemento, setComplemento] = useState('');
+
+  const { user } = useContext(AuthContext);
+
+  useEffect( () => {
+      async function loadCustomers(){
+
+        await firebase.firestore().collection('customers')
+        .get()
+        .then( (snapshot) => {
+          
+          let lista = [];
+
+          snapshot.forEach( (doc) => {
+            lista.push({
+              id: doc.id,
+              nome: doc.data().nome
+            })
+          })
+
+          if(lista.length === 0){
+            console.log('Nenhum cliente encontrado.')
+            setCustomers([
+              {
+                id: '1',
+                nome: 'Freelancer'
+              }
+            ])
+            setLoadCustomers(false);
+            return;
+          }
+
+          setCustomers(lista);
+          setLoadCustomers(false);
+
+        } )
+        .catch( (error) => {
+          console.log('Clientes não encontrados' + error);
+          setLoadCustomers(false);
+          setCustomers([
+            {
+              id: '1',
+              nome: ''
+            }
+          ])
+        } )
+
+      }
+
+      loadCustomers();
+  }, []);
 
   function handleRegister(e){
     e.preventDefault();
@@ -28,9 +83,20 @@ export default function New(){
 
           <form className="form-profile" onSubmit={handleRegister}> 
             <label>Cliente</label>
-            <select>
-              <option key={1} value={1}>Sujeito Programador</option>
-            </select>
+
+            { loadCustomers ? (
+              <input type="text" disabled={true} value="Carregando Cientes..." />
+            ) : (
+              <select value={customerSelected} onChange={(e)=>setCustomerSelected(e.target.value)} > 
+                {customers.map((item, index) => {
+                  return(
+                    <option key={item.id} value={index} >
+                      {item.nome}
+                    </option>
+                  );
+                })}
+              </select>
+            ) }
 
             <label>Assunto</label>
             <select value={assunto} onChange={(e) => setAssunto(e.target.value)} >
