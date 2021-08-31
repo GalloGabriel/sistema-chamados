@@ -77,6 +77,36 @@ export default function Dashboard(){
 
   }
 
+  async function handleMore(){
+    setLoadingMore(true);
+
+    await listRef.startAfter(lastDocs).limit(5)
+    .get()
+    .then((snapshot)=>{
+      updateState(snapshot)
+    })
+  }
+
+
+  if(loading){
+    return(
+      <div>
+        <Header/>
+
+        <div className="content">
+          <Title name="Chamados">
+            <FiMessageCircle size={25}/>
+          </Title>
+
+          <div className="container dashboard">
+            <span>Buscando Chamados...</span>
+          </div>
+
+        </div>
+      </div>
+    )
+  }
+
   return(
     <div>
       <Header/>
@@ -116,25 +146,39 @@ export default function Dashboard(){
               </thead>
 
               <tbody>
-                <tr>
-                  <td data-label="Cliente">Sujeito</td>
-                  <td data-label="Assunto">Suporte</td>
-                  <td data-label="Status">
-                    <span className="badge" style={{backgroundColor: '#05487a'}}>Em aberto</span>
-                  </td>
-                  <td data-label="Cadastrado em">10/08/2021</td>
-                  <td data-label="#">
-                    <button className="action" style={{ backgroundColor: '#3583f6' }}>
-                      <FiSearch color="#fff" size={17} />
-                    </button>
+                {chamados.map((item, index)=>{
+                    return(
+                      <tr key={index}>
+                        <td data-label="Cliente">{item.cliente}</td>
+                        <td data-label="Assunto">{item.assunto}</td>
+                        <td data-label="Status">
+                          <span 
+                            className="badge" 
+                            style={{backgroundColor: item.status === "Aberto" ? '#05487a' : "#999" }}
+                          >{item.status}</span>
+                        </td>
+                        <td data-label="Cadastrado em">{item.createdFormated}</td>
+                        <td data-label="#">
+                          <button className="action" style={{ backgroundColor: '#3583f6' }}>
+                            <FiSearch color="#fff" size={17} />
+                          </button>
 
-                    <button className="action" style={{ backgroundColor: '#f6a935' }}>
-                      <FiEdit2 color="#fff" size={17} />
-                    </button>
-                  </td>
-                </tr>
+                          <button className="action" style={{ backgroundColor: '#f6a935' }}>
+                            <FiEdit2 color="#fff" size={17} />
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                })}
+                
               </tbody>
             </table>
+
+            { loadingMore && 
+              <h3 style={{textAlign: 'center', marginTop: 15}}>Buscando dados...</h3> }
+
+            { !loadingMore && !isEmpty &&
+              <button className="btn-more" onClick={handleMore}>Buscar mais</button>}
 
           </>
         ) }
