@@ -17,16 +17,16 @@ export default function Modal({conteudo, close}) {
             <h2>Detalhes do Chamado</h2>
 
             <div className="row">
-              <span>Cliente: <a>{conteudo.cliente}</a></span>
+              <span>Cliente: <p>{conteudo.cliente}</p></span>
             </div>
 
             <div className="row">
-              <span>Assunto: <a>{conteudo.assunto}</a></span>
-              <span>Cadastrado em: <a>{conteudo.createdFormated}</a></span>
+              <span>Assunto: <p>{conteudo.assunto}</p></span>
+              <span>Cadastrado em: <p>{conteudo.createdFormated}</p></span>
             </div>
 
             <div className="row">
-              <span>Status: <a style={{ color: '#fff', backgroundColor: conteudo.status === "Aberto" ? '#05487a' : conteudo.status === "Progresso" ? '#bd93f9' :  '#50fa7b' }}>{conteudo.status}</a></span>
+              <span>Status: <p style={{ color: '#fff', backgroundColor: conteudo.status === "Aberto" ? '#05487a' : conteudo.status === "Progresso" ? '#bd93f9' :  '#50fa7b' }}>{conteudo.status}</p></span>
             </div>
 
             {conteudo.complemento !== "" && (
